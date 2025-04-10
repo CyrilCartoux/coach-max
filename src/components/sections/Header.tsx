@@ -1,10 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log('Auth state:', { user, loading });
+  }, [user, loading]);
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      router.push('/');
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-dark-400 bg-opacity-90 backdrop-blur-sm">
@@ -30,11 +46,34 @@ export default function Header() {
           </Link>
         </nav>
         
-        {/* CTA Button */}
-        <div className="hidden md:block">
-          <Link href="#" className="btn-primary">
-            Get Started
-          </Link>
+        {/* Desktop Auth Buttons */}
+        <div className="hidden md:flex items-center space-x-4">
+          {!loading && (
+            <>
+              {user ? (
+                <>
+                  <span className="text-gray-300">
+                    {user.email}
+                  </span>
+                  <button
+                    onClick={handleLogout}
+                    className="text-gray-300 hover:text-primary transition-colors"
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/auth" className="text-gray-300 hover:text-primary transition-colors">
+                    Sign in
+                  </Link>
+                  <Link href="/auth" className="btn-primary">
+                    Sign up
+                  </Link>
+                </>
+              )}
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -67,12 +106,35 @@ export default function Header() {
             <Link href="#pricing" className="text-gray-300 hover:text-primary transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
               Pricing
             </Link>
-            <Link href="#contact" className="text-gray-300 hover:text-primary transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
-              Contact
-            </Link>
-            <Link href="#" className="btn-primary self-start" onClick={() => setIsMenuOpen(false)}>
-              Get Started
-            </Link>
+            {!loading && (
+              <>
+                {user ? (
+                  <>
+                    <span className="text-gray-300 py-2">
+                      {user.email}
+                    </span>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsMenuOpen(false);
+                      }}
+                      className="text-gray-300 hover:text-primary transition-colors py-2 text-left"
+                    >
+                      Sign out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" className="text-gray-300 hover:text-primary transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
+                      Sign in
+                    </Link>
+                    <Link href="/signup" className="btn-primary self-start" onClick={() => setIsMenuOpen(false)}>
+                      Sign up
+                    </Link>
+                  </>
+                )}
+              </>
+            )}
           </div>
         </div>
       )}

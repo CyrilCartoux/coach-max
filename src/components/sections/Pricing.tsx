@@ -1,9 +1,13 @@
+'use client';
+
 import { CheckIcon } from "@heroicons/react/24/outline";
+import { useRouter } from 'next/navigation';
 
 const tiers = [
   {
     name: "Free",
     price: "0",
+    priceId: "free",
     description: "Perfect for trying out our platform",
     features: [
       "1 week program",
@@ -17,6 +21,7 @@ const tiers = [
   {
     name: "Premium",
     price: "17.99",
+    priceId: "premium_monthly",
     description: "Everything you need for your fitness journey",
     features: [
       "Unlimited personalized programs",
@@ -32,6 +37,7 @@ const tiers = [
   {
     name: "Lifetime",
     price: "499",
+    priceId: "lifetime_access",
     description: "One-time payment, lifetime access",
     features: [
       "All Premium features",
@@ -47,15 +53,21 @@ const tiers = [
 ];
 
 export default function Pricing() {
+  const router = useRouter();
+
+  const handleSelectPlan = (priceId: string) => {
+    router.push(`/payment?plan=${priceId}`);
+  };
+
   return (
-    <section className="section-padding bg-dark-400">
+    <section id="pricing" className="section-padding bg-dark-400 scroll-mt-20">
       <div className="container-custom">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-white mb-4">
             Simple, Transparent Pricing
           </h2>
           <p className="text-xl text-gray-300">
-            Choose the plan that's right for you
+            Choose the plan that&apos;s right for you
           </p>
         </div>
 
@@ -82,7 +94,7 @@ export default function Pricing() {
               
               <div className="mb-8">
                 <span className="text-4xl font-bold text-white">${tier.price}</span>
-                {tier.price !== "0" && (
+                {tier.price !== "0" && tier.name !== "Lifetime" && (
                   <span className="text-gray-400">/month</span>
                 )}
               </div>
@@ -97,6 +109,7 @@ export default function Pricing() {
               </ul>
 
               <button
+                onClick={() => handleSelectPlan(tier.priceId)}
                 className={`w-full py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
                   tier.popular
                     ? "bg-primary text-dark-500 hover:bg-opacity-90"
@@ -111,7 +124,7 @@ export default function Pricing() {
 
         <div className="mt-16 text-center">
           <p className="text-gray-300 mb-4">
-            Try Premium free for 14 days • No credit card required
+            Try Premium free for 7 days • No credit card required
           </p>
           <p className="text-gray-400 text-sm">
             Refer a friend and get 1 month free • 10% commission on referrals
