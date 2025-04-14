@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
 import {
@@ -11,11 +11,6 @@ import {
 } from '@stripe/react-stripe-js';
 
 const tiers = {
-  free: {
-    name: "Free",
-    price: "0",
-    description: "Perfect for trying out our platform",
-  },
   premium_monthly: {
     name: "Premium",
     price: "17.99",

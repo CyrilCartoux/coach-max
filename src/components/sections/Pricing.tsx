@@ -5,20 +5,6 @@ import { useRouter } from 'next/navigation';
 
 const tiers = [
   {
-    name: "Free",
-    price: "0",
-    priceId: "free",
-    description: "Perfect for trying out our platform",
-    features: [
-      "1 week program",
-      "Basic nutrition plan",
-      "3 AI coach questions per week",
-      "Basic progress tracking",
-    ],
-    cta: "Get Started",
-    popular: false,
-  },
-  {
     name: "Premium",
     price: "17.99",
     priceId: "premium_monthly",
@@ -31,7 +17,7 @@ const tiers = [
       "Advanced nutrition planning",
       "Priority support",
     ],
-    cta: "Start Free Trial",
+    cta: "Get Started",
     popular: true,
   },
   {
@@ -71,7 +57,7 @@ export default function Pricing() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {tiers.map((tier) => (
             <div
               key={tier.name}

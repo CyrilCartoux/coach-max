@@ -125,10 +125,10 @@ export default function Header() {
                   </>
                 ) : (
                   <>
-                    <Link href="/login" className="text-gray-300 hover:text-primary transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
+                    <Link href="/auth" className="text-gray-300 hover:text-primary transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
                       Sign in
                     </Link>
-                    <Link href="/signup" className="btn-primary self-start" onClick={() => setIsMenuOpen(false)}>
+                    <Link href="/auth" className="btn-primary self-start" onClick={() => setIsMenuOpen(false)}>
                       Sign up
                     </Link>
                   </>

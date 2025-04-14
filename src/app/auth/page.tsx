@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -64,7 +65,28 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-dark-500 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-dark-500 py-12 px-4 sm:px-6 lg:px-8 relative">
+      {/* Back Arrow Button */}
+      <Link 
+        href="/"
+        className="absolute top-6 left-6 text-gray-300 hover:text-primary transition-colors"
+      >
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          strokeWidth={2} 
+          stroke="currentColor" 
+          className="w-8 h-8"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" 
+          />
+        </svg>
+      </Link>
+
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="flex justify-center">
