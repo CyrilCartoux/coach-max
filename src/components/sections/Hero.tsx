@@ -55,7 +55,7 @@ export default function Hero() {
             </div>
           </div>
           
-          <div className={`relative ${isVisible ? 'animate-fade-in' : 'opacity-0'} animation-delay-300`}>
+          <div className={`relative ${isVisible ? 'animate-fade-in' : 'opacity-0'} animation-delay-300 hidden md:block`}>
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border-2 border-dark-300 bg-dark-400">
               {/* App preview mockup */}
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-dark-500 z-10"></div>

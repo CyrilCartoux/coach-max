@@ -24,7 +24,6 @@ const footerLinks = [
       { name: "Support Center", href: "/support" },
       { name: "Privacy Policy", href: "/privacy" },
       { name: "Terms of Service", href: "/terms" },
-      { name: "Download App", href: "/download" },
     ],
   },
 ];
