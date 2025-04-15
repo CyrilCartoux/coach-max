@@ -3,17 +3,17 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen bg-dark-500 flex items-center justify-center">
+    <main className="min-h-screen bg-dark-500 flex items-center justify-center px-4">
       <div className="container-custom">
         <div className="max-w-2xl mx-auto text-center">
           {/* Error Code with Animation */}
           <div className="relative mb-8">
-            <div className="text-[200px] font-bold text-primary/20">404</div>
+            <div className="text-[120px] md:text-[200px] font-bold text-primary/20 overflow-hidden">404</div>
           </div>
 
           {/* Joke Section */}
-          <div className="bg-dark-300 rounded-2xl p-8 mb-8">
-            <h2 className="text-2xl font-bold text-white mb-4">
+          <div className="bg-dark-300 rounded-2xl p-6 md:p-8 mb-8">
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
               Looks like this page skipped leg day! 🏋️‍♂️
             </h2>
             <p className="text-gray-300 mb-6">
