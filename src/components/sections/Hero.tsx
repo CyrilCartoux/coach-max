@@ -30,7 +30,7 @@ export default function Hero() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="#" className="btn-primary text-center">
+              <Link href="waiting-list" className="btn-primary text-center">
                 Get Started Free
               </Link>
               <Link 
