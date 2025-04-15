@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { CheckIcon, BoltIcon, StarIcon, UserGroupIcon, ClockIcon, FireIcon, ArrowTrendingUpIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { waitingListService } from '@/services/waiting-list';
+import { BoltIcon, FireIcon, UserPlusIcon, ClockIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
 
 const useCountdown = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -34,9 +34,8 @@ const useCountdown = () => {
 
 export default function WaitingList() {
   const [email, setEmail] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState('');
-  const router = useRouter();
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [error, setError] = useState<string | null>(null);
   const timeLeft = useCountdown();
 
   const validateEmail = (email: string) => {
@@ -46,27 +45,23 @@ export default function WaitingList() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setStatus('loading');
+    setError(null);
 
     if (!validateEmail(email)) {
+      setStatus('error');
       setError('Please enter a valid email address');
       return;
     }
 
     try {
-      const response = await fetch('/api/waiting-list', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit');
-      }
-
-      setIsSubmitted(true);
+      const { error } = await waitingListService.addToWaitingList(email);
+      if (error) throw error;
+      setStatus('success');
+      setEmail('');
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setStatus('error');
+      setError('Failed to join the waiting list. Please try again.');
     }
   };
 
@@ -133,7 +128,12 @@ export default function WaitingList() {
               </div>
             </div>
 
-            {!isSubmitted ? (
+            {status === 'success' ? (
+              <div className="bg-green-500/10 text-green-400 p-6 rounded-2xl">
+                <h2 className="text-2xl font-bold mb-2">Thank You!</h2>
+                <p>You've been added to our waiting list. We'll notify you when it's your turn to join.</p>
+              </div>
+            ) : (
               <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
                 <div className="flex flex-col md:flex-row gap-4">
                   <input
@@ -141,35 +141,22 @@ export default function WaitingList() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="flex-1 px-6 py-4 rounded-lg bg-dark-400 text-white border border-dark-200 focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="flex-1 px-6 py-4 rounded-lg bg-dark-300 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
                     required
+                    disabled={status === 'loading'}
                   />
                   <button
                     type="submit"
-                    className="px-8 py-4 rounded-lg bg-primary text-dark-500 font-semibold hover:bg-opacity-90 transition-all duration-300"
+                    disabled={status === 'loading'}
+                    className="px-8 py-4 rounded-lg bg-primary text-dark-500 font-semibold hover:bg-opacity-90 transition-all duration-300 disabled:opacity-50"
                   >
-                    Join Waiting List
+                    {status === 'loading' ? 'Joining...' : 'Join Waiting List'}
                   </button>
                 </div>
                 {error && (
-                  <p className="text-red-500 text-sm">{error}</p>
+                  <p className="text-red-400 text-sm">{error}</p>
                 )}
               </form>
-            ) : (
-              <div className="max-w-md mx-auto bg-dark-300 rounded-2xl p-8">
-                <h2 className="text-2xl font-bold text-white mb-4">
-                  Thank You for Joining!
-                </h2>
-                <p className="text-gray-300 mb-6">
-                  We've added you to our waiting list. We'll notify you as soon as spots become available.
-                </p>
-                <button
-                  onClick={() => router.push('/')}
-                  className="px-6 py-3 rounded-lg bg-dark-400 text-white hover:bg-dark-300 transition-all duration-300"
-                >
-                  Return to Home
-                </button>
-              </div>
             )}
           </div>
         </div>
@@ -190,7 +177,7 @@ export default function WaitingList() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-dark-300 rounded-2xl p-8">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-                <StarIcon className="w-6 h-6 text-primary" />
+                <BoltIcon className="w-6 h-6 text-primary" />
               </div>
               <h3 className="text-xl font-bold text-white mb-4">Early Access</h3>
               <p className="text-gray-300">
@@ -200,7 +187,7 @@ export default function WaitingList() {
 
             <div className="bg-dark-300 rounded-2xl p-8">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-                <BoltIcon className="w-6 h-6 text-primary" />
+                <ClockIcon className="w-6 h-6 text-primary" />
               </div>
               <h3 className="text-xl font-bold text-white mb-4">Priority Access</h3>
               <p className="text-gray-300">
@@ -210,7 +197,7 @@ export default function WaitingList() {
 
             <div className="bg-dark-300 rounded-2xl p-8">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-                <UserGroupIcon className="w-6 h-6 text-primary" />
+                <UserPlusIcon className="w-6 h-6 text-primary" />
               </div>
               <h3 className="text-xl font-bold text-white mb-4">Exclusive Community</h3>
               <p className="text-gray-300">

@@ -1,4 +1,8 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
+import { newsletterService } from '@/services/newsletter';
 
 const footerLinks = [
   {
@@ -68,6 +72,26 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('loading');
+    setError(null);
+
+    const { success, error } = await newsletterService.subscribe(email);
+    
+    if (success) {
+      setStatus('success');
+      setEmail('');
+    } else {
+      setStatus('error');
+      setError(error);
+    }
+  };
+
   return (
     <footer className="bg-dark-400 pt-16 pb-8">
       <div className="container-custom">
@@ -122,18 +146,29 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <h3 className="font-bold text-white text-lg mb-4">Stay Updated</h3>
             <p className="text-gray-400 mb-4">Subscribe for the latest features and updates.</p>
-            <form className="flex flex-col space-y-2">
+            <form onSubmit={handleSubscribe} className="flex flex-col space-y-2">
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email"
                 className="px-4 py-2 bg-dark-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-white"
+                required
+                disabled={status === 'loading'}
               />
               <button
                 type="submit"
                 className="btn-primary py-2"
+                disabled={status === 'loading'}
               >
-                Subscribe
+                {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
               </button>
+              {status === 'success' && (
+                <p className="text-green-400 text-sm">Thank you for subscribing!</p>
+              )}
+              {status === 'error' && (
+                <p className="text-red-400 text-sm">{error}</p>
+              )}
             </form>
           </div>
         </div>
