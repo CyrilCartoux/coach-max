@@ -17,7 +17,7 @@ const tiers = [
       "Advanced nutrition planning",
       "Priority support",
     ],
-    cta: "Get Started",
+    cta: "Join Waiting List",
     popular: true,
   },
   {
@@ -33,7 +33,7 @@ const tiers = [
       "Lifetime user badge",
       "VIP support",
     ],
-    cta: "Get Lifetime Access",
+    cta: "Join Waiting List",
     popular: false,
   },
 ];
@@ -41,8 +41,8 @@ const tiers = [
 export default function Pricing() {
   const router = useRouter();
 
-  const handleSelectPlan = (priceId: string) => {
-    router.push(`/payment?plan=${priceId}`);
+  const handleSelectPlan = () => {
+    router.push('/waiting-list');
   };
 
   return (
@@ -80,7 +80,7 @@ export default function Pricing() {
               
               <div className="mb-8">
                 <span className="text-4xl font-bold text-white">${tier.price}</span>
-                {tier.price !== "0" && tier.name !== "Lifetime" && (
+                {tier.name !== "Lifetime" && (
                   <span className="text-gray-400">/month</span>
                 )}
               </div>
@@ -95,7 +95,7 @@ export default function Pricing() {
               </ul>
 
               <button
-                onClick={() => handleSelectPlan(tier.priceId)}
+                onClick={handleSelectPlan}
                 className={`w-full py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
                   tier.popular
                     ? "bg-primary text-dark-500 hover:bg-opacity-90"
@@ -110,10 +110,10 @@ export default function Pricing() {
 
         <div className="mt-16 text-center">
           <p className="text-gray-300 mb-4">
-            Try Premium free for 7 days • No credit card required
+            Join our waiting list to be notified when spots become available
           </p>
           <p className="text-gray-400 text-sm">
-            Refer a friend and get 1 month free • 10% commission on referrals
+            Limited spots available • Priority access for early joiners
           </p>
         </div>
       </div>

@@ -47,7 +47,7 @@ export default function Header() {
         </nav>
         
         {/* Desktop Auth Buttons */}
-        <div className="hidden md:flex items-center space-x-4">
+        {/* <div className="hidden md:flex items-center space-x-4">
           {!loading && (
             <>
               {user ? (
@@ -74,7 +74,7 @@ export default function Header() {
               )}
             </>
           )}
-        </div>
+        </div> */}
 
         {/* Mobile Menu Button */}
         <button 
@@ -106,7 +106,7 @@ export default function Header() {
             <Link href="#pricing" className="text-gray-300 hover:text-primary transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
               Pricing
             </Link>
-            {!loading && (
+            {/* {!loading && (
               <>
                 {user ? (
                   <>
@@ -134,7 +134,7 @@ export default function Header() {
                   </>
                 )}
               </>
-            )}
+            )} */}
           </div>
         </div>
       )}

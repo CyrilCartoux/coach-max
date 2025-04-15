@@ -5,6 +5,7 @@ import Testimonials from "@/components/sections/Testimonials";
 import Pricing from "@/components/sections/Pricing";
 import CTASection from "@/components/sections/CTASection";
 import Footer from "@/components/sections/Footer";
+import WaitingList from "@/components/sections/WaitingList";
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
       <Features />
       <Testimonials />
       <Pricing />
-      <CTASection />
+      <WaitingList />
       <Footer />
     </main>
   );
