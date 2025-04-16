@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
@@ -182,9 +183,9 @@ const CheckoutForm = ({ selectedPlan }: { selectedPlan: string }) => {
   );
 };
 
-export default function PaymentPage() {
+const PaymentContent = () => {
   const searchParams = useSearchParams();
-  const [selectedPlan, setSelectedPlan] = useState(searchParams.get('plan') || 'premium_monthly');
+  const [selectedPlan, setSelectedPlan] = useState(searchParams?.get('plan') || 'premium_monthly');
 
   const handlePlanChange = (plan: string) => {
     setSelectedPlan(plan);
@@ -249,5 +250,13 @@ export default function PaymentPage() {
         </div>
       </div>
     </main>
+  );
+};
+
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PaymentContent />
+    </Suspense>
   );
 } 
