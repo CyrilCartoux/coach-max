@@ -55,13 +55,24 @@ export default function WaitingList() {
     }
 
     try {
-      const { error } = await waitingListService.addToWaitingList(email);
-      if (error) throw error;
+      const response = await fetch('/api/waiting-list', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to join the waiting list');
+      }
+
       setStatus('success');
       setEmail('');
     } catch (err) {
       setStatus('error');
-      setError('Failed to join the waiting list. Please try again.');
+      setError(err instanceof Error ? err.message : 'Failed to join the waiting list. Please try again.');
     }
   };
 
